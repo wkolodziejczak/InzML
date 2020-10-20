@@ -13,7 +13,7 @@ for img in img_list:
     img_array.append(cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE))
 
 fig_height = 2
-fig_width = 5
+fig_width = 4
 
 #Create plot
 
