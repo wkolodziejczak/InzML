@@ -5,8 +5,8 @@ import cv2
 from sklearn import tree, svm, neighbors, linear_model
 
 # Variables
-fig_height = 5
-fig_width = 12
+fig_height = 2
+fig_width = 8
 path = "dataset/"
 images = os.listdir(path)
 img_list = []
@@ -38,14 +38,18 @@ training_label = number_label_list[0:training_data_length]
 testing_data = reshaped_array[training_data_length:]
 actual_label = number_label_list[training_data_length:]
 
-def plot_images():
+predicted_values = []
+
+def plot_images(predicted_values):
     # Create plot
     offset = 0
     fig = plt.figure()
     for i in range(fig_height):
         for j in range(fig_width):
             plt.subplot2grid((fig_height, fig_width), (i, j))
-            plt.imshow(img_list[j+offset], cmap="gray")
+            plt.imshow(img_list[testing_data_length+j+offset], cmap="gray")
+            plt.axis('off')
+            plt.title('Predicted number = ' + str(predicted_values[j+offset]),fontdict={'fontsize': 8})
         offset += fig_width
     plt.show()
 
@@ -55,7 +59,7 @@ def predict_image(classifier, predicted_values):
         predicted_image=testing_data[img]
         reshaped = predicted_image.reshape(16,16)
         predicted_values.append(classifier.predict([testing_data[img]]))
-    
+        
     # Change output array type to string
     predicted_values = np.array([x[0].astype(str) for x in predicted_values])
     return predicted_values
@@ -67,14 +71,14 @@ def calculate_accuracy(predicted_values):
             count+=1
     print("Accuracy = ", (count/testing_data_length)*100, "%")
 
-def classify_tree():
+def classify_tree(predicted_values):
     # Train Data
     classify = tree.DecisionTreeClassifier()
     classify = classify.fit(training_data, training_label)
-    predicted_values = []
     
     predict_image(classify, predicted_values)
     calculate_accuracy(predicted_values)
+    return predicted_values
 
 def classify_svm():
     # Train Data
@@ -103,8 +107,9 @@ def classify_perceptron():
     predict_image(classify, predicted_values)
     calculate_accuracy(predicted_values)
 
-classify_tree()
-classify_svm()
-classify_KNeighbors()
-classify_perceptron()
-#plot_images()
+classify_tree(predicted_values)
+#classify_svm()
+#classify_KNeighbors()
+#classify_perceptron()
+#print(predicted_values)
+#plot_images(predicted_values)
