@@ -5,7 +5,7 @@ import cv2
 from sklearn import tree, svm, neighbors, linear_model
 
 # Variables
-fig_height = 2
+fig_height = 5
 fig_width = 8
 path = "dataset/"
 images = os.listdir(path)
@@ -49,7 +49,7 @@ def plot_images(predicted_values):
             plt.subplot2grid((fig_height, fig_width), (i, j))
             plt.imshow(img_list[testing_data_length+j+offset], cmap="gray")
             plt.axis('off')
-            plt.title('Predicted number = ' + str(predicted_values[j+offset]),fontdict={'fontsize': 8})
+            plt.title('Predicted: ' + str(predicted_values[j+offset]),fontdict={'fontsize': 8})
         offset += fig_width
     plt.show()
 
@@ -80,36 +80,37 @@ def classify_tree(predicted_values):
     calculate_accuracy(predicted_values)
     return predicted_values
 
-def classify_svm():
+def classify_svm(predicted_values):
     # Train Data
     classify = svm.SVC()
     classify = classify.fit(training_data, training_label)
-    predicted_values = []
 
     predict_image(classify, predicted_values)
     calculate_accuracy(predicted_values)
+    return predicted_values
 
-def classify_KNeighbors():
+def classify_KNeighbors(predicted_values):
     # Train Data
     classify = neighbors.KNeighborsClassifier()
     classify = classify.fit(training_data, training_label)
-    predicted_values = []
 
     predict_image(classify, predicted_values)
     calculate_accuracy(predicted_values)
+    return predicted_values
 
-def classify_perceptron():
+def classify_perceptron(predicted_values):
     # Train Data
     classify = linear_model.Perceptron()
     classify = classify.fit(training_data, training_label)
-    predicted_values = []
 
     predict_image(classify, predicted_values)
     calculate_accuracy(predicted_values)
+    return predicted_values
+
+
 
 classify_tree(predicted_values)
-#classify_svm()
-#classify_KNeighbors()
-#classify_perceptron()
-#print(predicted_values)
-#plot_images(predicted_values)
+#classify_svm(predicted_values)
+#classify_KNeighbors(predicted_values)
+#classify_perceptron(predicted_values)
+plot_images(predicted_values)
